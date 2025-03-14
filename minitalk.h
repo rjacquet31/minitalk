@@ -1,30 +1,26 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_printf_unsigned_number.c                        :+:      :+:    :+:   */
+/*   minitalk.h                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: rafael <rafael@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/02/11 06:22:16 by rafael            #+#    #+#             */
-/*   Updated: 2025/02/11 06:22:16 by rafael           ###   ########.fr       */
+/*   Created: 2025/03/14 18:05:47 by rafael            #+#    #+#             */
+/*   Updated: 2025/03/14 18:05:47 by rafael           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "include/ft_printf.h"
+#ifndef MINITALK_H
+# define MINITALK_H
 
-int	ft_printf_unsigned_number(va_list *arg)
-{
-	unsigned int	nb;
-	int				count;
+# include <signal.h>
+# include <stdlib.h>
+# include <unistd.h>
+# include <string.h>
+# include <locale.h>
 
-	nb = va_arg(*arg, unsigned int);
-	count = ft_count_nbr_unsigned(nb);
-	if (nb > 9)
-	{
-		ft_putnbr_fd(nb / 10, 1);
-		ft_putnbr_fd(nb % 10, 1);
-	}
-	else
-		ft_putchar_fd(nb + '0', 1);
-	return (count);
-}
+void	ft_putnbr(int n);
+void	ft_putchar(char c);
+int		ft_atoi(char *str);
+
+#endif

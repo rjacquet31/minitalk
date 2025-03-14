@@ -1,33 +1,51 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_printf_str.c                                    :+:      :+:    :+:   */
+/*   utils.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: rafael <rafael@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/02/11 06:21:31 by rafael            #+#    #+#             */
-/*   Updated: 2025/02/11 06:21:31 by rafael           ###   ########.fr       */
+/*   Created: 2025/03/14 18:06:19 by rafael            #+#    #+#             */
+/*   Updated: 2025/03/14 18:06:19 by rafael           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "include/ft_printf.h"
+#include "minitalk.h"
 
-int	ft_printf_str(va_list *arg)
+int	ft_atoi(char *str)
 {
-	char	*str;
-	int		i;
+	int	i;
+	int	n;
 
-	str = va_arg(*arg, char *);
 	i = 0;
-	if (!str)
-	{
-		ft_putstr_fd("(null)", 1);
-		return (6);
-	}
+	n = 0;
 	while (str[i] != '\0')
 	{
-		ft_putchar_fd(str[i], 1);
-		i++;
+		if (48 <= str[i] && str[i] <= 57)
+		{
+			n = n * 10 + str[i] - 48;
+			i++;
+		}
+		else
+		{
+			write(1, "Le PID est incorrect\n", 21);
+			exit(0);
+		}
 	}
-	return (i);
+	return (n);
+}
+
+void	ft_putchar(char c)
+{
+	write(1, &c, 1);
+}
+
+void	ft_putnbr(int n)
+{
+	unsigned int	nb;
+
+	nb = n;
+	if (nb >= 10)
+		ft_putnbr(nb / 10);
+	ft_putchar(nb % 10 + 48);
 }

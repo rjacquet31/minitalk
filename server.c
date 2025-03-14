@@ -1,16 +1,16 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   server_bonus.c                                     :+:      :+:    :+:   */
+/*   server.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: rafael <rafael@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/03/14 18:08:35 by rafael            #+#    #+#             */
-/*   Updated: 2025/03/14 18:08:35 by rafael           ###   ########.fr       */
+/*   Created: 2025/03/14 18:06:03 by rafael            #+#    #+#             */
+/*   Updated: 2025/03/14 18:06:03 by rafael           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "minitalk_bonus.h"
+#include "minitalk.h"
 
 void	ft_error_handler(int i)
 {
@@ -39,7 +39,7 @@ void	ft_signal_handler(int sig, siginfo_t *info, void *context)
 		val += 0;
 	if (sig == SIGUSR2)
 		val += bit;
-	bit *= 2;
+	bit <<= 1;
 	if (bit == 256)
 	{
 		bit = 1;

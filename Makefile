@@ -1,85 +1,65 @@
-RED=\033[0;31m
-GREEN=\033[0;32m
-YELLOW=\033[1;33m
-BLUE=\033[0;34m
-ORANGE=\033[38;2;255;165;0m
-NC=\033[0m
+SRCS_SVR = server.c utils.c
+SRCS_CLT = client.c utils.c
+SRCS_SVR_BONUS = bonus/server_bonus.c utils.c
+SRCS_CLT_BONUS = bonus/client_bonus.c utils.c
 
-SRC_DIR = src/
-BONUS_DIR = bonus/
-OBJ_DIR = obj/
+OBJS_DIR = objs/
+OBJS_DIR_BONUS = objs_bonus/
 
-HEADERS = include/minitalk.h
+SRCS_SVR_OBJS = $(addprefix $(OBJS_DIR),$(SRCS_SVR:.c=.o))
+SRCS_CLT_OBJS = $(addprefix $(OBJS_DIR),$(SRCS_CLT:.c=.o))
+SRCS_SVR_BONUS_OBJS = $(addprefix $(OBJS_DIR_BONUS),server_bonus.o utils.o)
+SRCS_CLT_BONUS_OBJS = $(addprefix $(OBJS_DIR_BONUS),client_bonus.o utils.o)
 
-FTPRINTF = ft_printf/lib/libftprintf.a
-FTPRINTF_PATH = ft_printf/
+NAME_SVR = server
+NAME_CLT = client
+NAME_SVR_BONUS = server_bonus
+NAME_CLT_BONUS = client_bonus
 
-CC = cc -Wall -Werror -Wextra
-CFLAGS = -I.
-LDFLAGS = -Lft_printf/lib -lftprintf
+CC = gcc
+FLAGS = -Werror -Wextra -Wall
 
-SERVER_SRCS = $(SRC_DIR)server.c
-CLIENT_SRCS = $(SRC_DIR)client.c
+all: $(OBJS_DIR) $(NAME_CLT) $(NAME_SVR)
 
-SERVER_BONUS_SRCS = $(BONUS_DIR)server_bonus.c
-CLIENT_BONUS_SRCS = $(BONUS_DIR)client_bonus.c
+$(OBJS_DIR):
+	@$(CC) $(FLAGS) -c $(SRCS_CLT) $(SRCS_SVR)
+	@mkdir -p $@
+	@mv *.o $@
 
-SERVER_OBJS = $(SERVER_SRCS:$(SRC_DIR)%.c=$(OBJ_DIR)%.o)
-CLIENT_OBJS = $(CLIENT_SRCS:$(SRC_DIR)%.c=$(OBJ_DIR)%.o)
+$(NAME_CLT):
+	@$(CC) $(FLAGS) -o $@ $(SRCS_CLT_OBJS)
+	@printf "\033[0;32mClient Compiled\n\e[0m"
 
-SERVER_BONUS_OBJS = $(SERVER_BONUS_SRCS:$(BONUS_DIR)%.c=$(OBJ_DIR)%.o)
-CLIENT_BONUS_OBJS = $(CLIENT_BONUS_SRCS:$(BONUS_DIR)%.c=$(OBJ_DIR)%.o)
+$(NAME_SVR):
+	@$(CC) $(FLAGS) -o $@ $(SRCS_SVR_OBJS)
+	@printf "\033[0;32mServer Compiled\n\e[0m"
 
-$(OBJ_DIR)%.o: $(SRC_DIR)%.c $(HEADERS)
-	@mkdir -p $(OBJ_DIR)
-	@$(CC) $(CFLAGS) -c $< -o $@
+$(OBJS_DIR_BONUS):
+	@$(CC) $(FLAGS) -c $(SRCS_CLT_BONUS) $(SRCS_SVR_BONUS)
+	@mkdir -p $@
+	@mv *.o $@
 
-$(OBJ_DIR)%.o: $(BONUS_DIR)%.c $(HEADERS)
-	@mkdir -p $(OBJ_DIR)
-	@$(CC) $(CFLAGS) -c $< -o $@
+$(NAME_CLT_BONUS):
+	@$(CC) $(FLAGS) -o $@ $(SRCS_CLT_BONUS_OBJS)
+	@printf "\033[0;32mClient Bonus Compiled\n\e[0m"
 
-all: ft_printf server client
-
-bonus: ft_printf server_bonus client_bonus
-
-ft_printf:
-	@echo "$(YELLOW)Compiling ft_printf...$(NC)"
-	@$(MAKE) -C $(FTPRINTF_PATH)
-
-server: $(SERVER_OBJS)
-	@echo "$(YELLOW)Compiling server...$(NC)"
-	@$(CC) $(SERVER_OBJS) $(LDFLAGS) -o server
-	@echo "$(BLUE)Server created!$(NC)"
-
-client: $(CLIENT_OBJS)
-	@echo "$(YELLOW)Compiling client...$(NC)"
-	@$(CC) $(CLIENT_OBJS) $(LDFLAGS) -o client
-	@echo "$(BLUE)Client created!$(NC)"
-
-server_bonus: $(SERVER_BONUS_OBJS)
-	@echo "$(YELLOW)Compiling server bonus...$(NC)"
-	@$(CC) $(SERVER_BONUS_OBJS) $(LDFLAGS) -o server_bonus
-	@echo "$(BLUE)Server bonus created!$(NC)"
-
-client_bonus: $(CLIENT_BONUS_OBJS)
-	@echo "$(YELLOW)Compiling client bonus...$(NC)"
-	@$(CC) $(CLIENT_BONUS_OBJS) $(LDFLAGS) -o client_bonus
-	@echo "$(BLUE)Client bonus created!$(NC)"
+$(NAME_SVR_BONUS):
+	@$(CC) $(FLAGS) -o $(NAME_SVR_BONUS) $(SRCS_SVR_BONUS_OBJS)
+	@printf "\033[0;32mServer Bonus Compiled\n\e[0m"
+	
+bonus: $(OBJS_DIR_BONUS) $(NAME_CLT_BONUS) $(NAME_SVR_BONUS)
 
 clean:
-	@$(MAKE) clean -C $(FTPRINTF_PATH)
-	@echo "$(ORANGE)Cleaning objects for Minitalk...$(NC)"
-	@rm -rdf $(OBJ_DIR)
-	@echo "$(GREEN)Cleaned Minitalk objects!$(NC)"
+	@rm -f $(NAME_CLT) $(NAME_CLT_BONUS) $(NAME_SVR) $(NAME_SVR_BONUS)
 
-fclean: clean
-	@echo "$(ORANGE)Fully cleaning ft_printf library...$(NC)"
-	@$(MAKE) fclean -C $(FTPRINTF_PATH) > /dev/null
-	@echo "$(BLUE)Fully cleaned ft_printf!$(NC)"
-	@echo "$(ORANGE)Removing executable files...$(NC)"
-	@rm -f client server client_bonus server_bonus
-	@echo "$(BLUE)Fully cleaned Minitalk project!$(NC)"
+fclean:
+	@rm -f $(NAME_CLT) $(NAME_CLT_BONUS) $(NAME_SVR) $(NAME_SVR_BONUS)
+	@rm -rf $(OBJS_DIR)
+	@rm -rf $(OBJS_DIR_BONUS)
+	@printf "\033[0;31mDeleted Server/Bonus, Client/Bonus and Objects/Bonus\n\e[0m"
 
 re: fclean all
 
-.PHONY: all bonus ft_printf server client server_bonus client_bonus clean fclean re
+bonus_re: fclean bonus
+
+.PHONY: bonus clean fclean re bonus_re all

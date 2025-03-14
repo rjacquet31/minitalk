@@ -1,16 +1,16 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   client_bonus.c                                     :+:      :+:    :+:   */
+/*   client.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: rafael <rafael@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/03/14 18:07:58 by rafael            #+#    #+#             */
-/*   Updated: 2025/03/14 18:07:58 by rafael           ###   ########.fr       */
+/*   Created: 2025/03/14 18:05:29 by rafael            #+#    #+#             */
+/*   Updated: 2025/03/14 18:05:29 by rafael           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "minitalk_bonus.h"
+#include "minitalk.h"
 
 void	ft_error_handler(int i)
 {
@@ -72,10 +72,7 @@ void	ft_receipt(int sig, siginfo_t *info, void *context)
 	if (sig == SIGUSR1)
 		ft_send_signal(id, NULL);
 	if (sig == SIGUSR2)
-	{
-		write(1, "Server >> \"message reçus\"\n", 28);
 		exit(EXIT_SUCCESS);
-	}
 }
 
 int	main(int ac, char **av)
